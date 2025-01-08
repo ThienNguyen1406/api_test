@@ -13,9 +13,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
   @override
   void initState() {
     super.initState();
-    // Gọi API khi widget được khởi tạo
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<WeatherProvider>().setWeather();
+      context.read<WeatherProvider>().fetchWeather();
     });
   }
 
@@ -23,23 +22,15 @@ class _WeatherScreenState extends State<WeatherScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Weather Forecast"),
-        actions: [
-          IconButton(
-            onPressed: () {
-              context.read<WeatherProvider>().setWeather();
-            },
-            icon: const Icon(Icons.refresh),
-          ),
-        ],
+        title: const Text('Weather List'),
       ),
       body: Consumer<WeatherProvider>(
         builder: (context, weatherProvider, child) {
-          final weatherList = weatherProvider.weatherList;
+          final weatherList = weatherProvider.listWeather;
 
           if (weatherList.isEmpty) {
             return const Center(
-              child: Text("No weather data available"),
+              child: CircularProgressIndicator(),
             );
           }
 
@@ -49,7 +40,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
             itemBuilder: (BuildContext context, int index) {
               final weather = weatherList[index];
               return Card(
-                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                margin: const EdgeInsets.symmetric(vertical: 8),
                 child: ListTile(
                   title: Text("Time: ${weather.time ?? 'N/A'}"),
                   subtitle: Column(
@@ -71,7 +62,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.read<WeatherProvider>().defaultWeather();
+          context.read<WeatherProvider>().clearWeather();
         },
         child: const Icon(Icons.clear),
       ),
