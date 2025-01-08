@@ -1,4 +1,5 @@
 import 'package:api_test/provider/weather_provider.dart';
+import 'package:api_test/util/call_api.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +17,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<WeatherProvider>().fetchWeather();
     });
+      CallApi().showValue(context);
   }
 
   @override
@@ -62,7 +64,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.read<WeatherProvider>().clearWeather();
+           CallApi.hideValue(context);
         },
         child: const Icon(Icons.clear),
       ),
